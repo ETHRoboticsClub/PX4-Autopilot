@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# @name Gazebo Custom Drone
+#
+# @type Quadrotor
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+PX4_SIMULATOR=${PX4_SIMULATOR:=gz}
+PX4_GZ_WORLD=${PX4_GZ_WORLD:=default}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=drone}  
+
+# Rotor count
+param set CA_ROTOR_COUNT 4
+
+############################################
+# GEOMETRY
+############################################
+# Front Right (CCW)
+param set CA_ROTOR0_PX  0.09
+param set CA_ROTOR0_PY  0.09
+param set CA_ROTOR0_KM  0.05
+
+# Front Left (CW)
+param set CA_ROTOR1_PX -0.09
+param set CA_ROTOR1_PY -0.09
+param set CA_ROTOR1_KM 0.05
+
+# Rear Right (CW)
+param set CA_ROTOR2_PX  0.09
+param set CA_ROTOR2_PY -0.09
+param set CA_ROTOR2_KM -0.05
+
+# Rear Left (CCW)
+param set-default CA_ROTOR3_PX -0.09
+param set-default CA_ROTOR3_PY  0.09
+param set-default CA_ROTOR3_KM -0.05
+
+
+############################################
+# ESC / Actuator Mapping
+############################################
+param set SIM_GZ_EC_FUNC1 101
+param set SIM_GZ_EC_FUNC2 102
+param set SIM_GZ_EC_FUNC3 103
+param set SIM_GZ_EC_FUNC4 104
+
+param set SIM_GZ_EC_MIN1 150
+param set SIM_GZ_EC_MIN2 150
+param set SIM_GZ_EC_MIN3 150
+param set SIM_GZ_EC_MIN4 150
+
+param set SIM_GZ_EC_MAX1 2000
+param set SIM_GZ_EC_MAX2 2000
+param set SIM_GZ_EC_MAX3 2000
+param set SIM_GZ_EC_MAX4 2000
+
+############################################
+# PID GAINS 
+############################################
+# Rate Controller 
+param set MC_ROLLRATE_P 0.057
+param set MC_ROLLRATE_I 0.1
+param set MC_ROLLRATE_D 0.0003
+
+param set MC_PITCHRATE_P 0.190
+param set MC_PITCHRATE_I 0.25
+param set MC_PITCHRATE_D 0.0004
+
+param set MC_YAWRATE_P 0.05
+param set MC_YAWRATE_I 0.04
+param set MC_YAWRATE_D 0.000
+
+# Attitude Controller (outer loop)
+param set MC_ROLL_P 6.5
+param set MC_PITCH_P 5.03
+param set MC_YAW_P 6.5
+
+############################################
+param set MPC_THR_HOVER 0.50
+param set NAV_DLL_ACT 2
+
