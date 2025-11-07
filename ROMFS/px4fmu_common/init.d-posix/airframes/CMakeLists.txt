@@ -120,6 +120,7 @@ px4_add_romfs_files(
 	70000_gz_atmos
 
 	4053_gz_drone
+	4022_gz_x500_cam
 
 	# [22000, 22999] Reserve for custom models
 )
