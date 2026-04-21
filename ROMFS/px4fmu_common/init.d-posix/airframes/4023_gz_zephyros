@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# @name Gazebo Zephyros
+#
+# @type Quadrotor
+#
+# @class Copter
+#
+# @output MAIN1 motor 0 (front-right, CCW)
+# @output MAIN2 motor 1 (back-left, CCW)
+# @output MAIN3 motor 2 (front-left, CW)
+# @output MAIN4 motor 3 (back-right, CW)
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+PX4_SIMULATOR=${PX4_SIMULATOR:=gz}
+PX4_GZ_WORLD=${PX4_GZ_WORLD:=default}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=zephyros}
+
+param set-default SIM_GZ_EN 1
+
+# Standard X-frame quadrotor
+param set-default CA_AIRFRAME 0
+param set-default CA_ROTOR_COUNT 4
+
+# Motor positions in FRD body frame (x-forward, y-right, z-down)
+# Derived from SolidWorks URDF export:
+#   Front-Right CCW: (0.0884, +0.0720)
+#   Back-Left   CCW: (-0.0822, -0.0680)
+#   Front-Left  CW:  (0.0886, -0.0680)
+#   Back-Right  CW:  (-0.0818, +0.0718)
+
+param set-default CA_ROTOR0_PX  0.0884
+param set-default CA_ROTOR0_PY  0.0720
+param set-default CA_ROTOR0_KM  0.05
+
+param set-default CA_ROTOR1_PX -0.0822
+param set-default CA_ROTOR1_PY -0.0680
+param set-default CA_ROTOR1_KM  0.05
+
+param set-default CA_ROTOR2_PX  0.0886
+param set-default CA_ROTOR2_PY -0.0680
+param set-default CA_ROTOR2_KM -0.05
+
+param set-default CA_ROTOR3_PX -0.0818
+param set-default CA_ROTOR3_PY  0.0718
+param set-default CA_ROTOR3_KM -0.05
+
+# Map PX4 ESC outputs to Gazebo motor numbers
+param set-default SIM_GZ_EC_FUNC1 101
+param set-default SIM_GZ_EC_FUNC2 102
+param set-default SIM_GZ_EC_FUNC3 103
+param set-default SIM_GZ_EC_FUNC4 104
+
+# Motor speed range (rad/s): must match model.sdf maxRotVelocity
+param set-default SIM_GZ_EC_MIN1 100
+param set-default SIM_GZ_EC_MIN2 100
+param set-default SIM_GZ_EC_MIN3 100
+param set-default SIM_GZ_EC_MIN4 100
+
+param set-default SIM_GZ_EC_MAX1 1500
+param set-default SIM_GZ_EC_MAX2 1500
+param set-default SIM_GZ_EC_MAX3 1500
+param set-default SIM_GZ_EC_MAX4 1500
+
+# Hover thrust: mass=969g, thrust_max=30.8N → T/W=3.24
+# ω_hover = sqrt(9.51N / (4 * 3.422e-6)) ≈ 835 rad/s
+# normalized: (835-100)/(1500-100) ≈ 0.53
+param set-default MPC_THR_HOVER 0.53
+
+param set-default NAV_DLL_ACT 2
